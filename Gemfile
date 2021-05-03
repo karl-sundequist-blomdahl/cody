@@ -140,3 +140,5 @@ gem "bootsnap", require: false
 gem "rack-canonical-host"
 
 gem "sendgrid-actionmailer"
+
+gem "rack-floc_block", "~> 0.1"
