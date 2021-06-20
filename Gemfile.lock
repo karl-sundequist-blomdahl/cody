@@ -251,7 +251,7 @@ GEM
       activerecord (>= 5.2)
       request_store (~> 1.1)
     parallel (1.19.2)
-    parser (3.0.0.0)
+    parser (3.0.1.1)
       ast (~> 2.4.1)
     pg (1.2.3)
     pry (0.13.1)
@@ -365,7 +365,7 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    scout_apm (4.0.4)
+    scout_apm (4.1.1)
       parser
     sdoc (2.1.0)
       rdoc (>= 5.0)
