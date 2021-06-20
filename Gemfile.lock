@@ -312,7 +312,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rdoc (6.3.0)
+    rdoc (6.3.1)
     redis (4.3.1)
     regexp_parser (2.0.3)
     request_store (1.5.0)
@@ -371,7 +371,7 @@ GEM
       faraday (> 0.8, < 2.0)
     scout_apm (4.1.1)
       parser
-    sdoc (2.1.0)
+    sdoc (2.2.0)
       rdoc (>= 5.0)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
@@ -518,7 +518,7 @@ DEPENDENCIES
   rubocop-rails
   sass-rails (~> 6.0)
   scout_apm
-  sdoc (~> 2.1.0)
+  sdoc (~> 2.2.0)
   selenium-webdriver
   sendgrid-actionmailer
   sentry-rails
