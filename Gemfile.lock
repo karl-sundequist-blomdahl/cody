@@ -396,8 +396,9 @@ GEM
     sentry-ruby-core (4.6.3)
       concurrent-ruby
       faraday
-    sentry-sidekiq (4.6.1)
+    sentry-sidekiq (4.6.3)
       sentry-ruby-core (~> 4.6.0)
+      sidekiq (>= 3.0)
     sexp_processor (4.12.1)
     shoulda-matchers (5.0.0)
       activesupport (>= 5.2.0)
