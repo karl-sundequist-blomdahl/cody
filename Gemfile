@@ -71,7 +71,7 @@ gem "kaminari"
 
 gem "pundit"
 
-gem "paper_trail", "~> 12.0"
+gem "paper_trail", "~> 12.1"
 
 group :development, :test do
   gem "break"
