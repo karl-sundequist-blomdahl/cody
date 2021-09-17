@@ -1,6 +1,29 @@
 # rubocop:disable Naming/VariableName
 require "rails_helper"
 
+# mock objects to handle the GraphQL response
+class UserWithStatus
+  attr_reader :login
+  attr_reader :status
+
+  def initialize(login:, indicatesLimitedAvailability:)
+    @login = login
+    @status = UserStatus.new(indicatesLimitedAvailability: indicatesLimitedAvailability)
+  end
+
+  class UserStatus
+    attr_reader :indicatesLimitedAvailability
+
+    def initialize(indicatesLimitedAvailability:)
+      @indicatesLimitedAvailability = indicatesLimitedAvailability
+    end
+
+    def indicates_limited_availability?
+      @indicatesLimitedAvailability
+    end
+  end
+end
+
 RSpec.describe ReviewerList do
   describe "#choose_reviewer" do
     it "does not pick users who are in the exclude_list" do
@@ -27,29 +50,6 @@ RSpec.describe ReviewerList do
       list = ReviewerList.new(reviewers: reviewers)
       chosen_reviewer = list.choose_reviewer(exclude_list: [])
       expect(chosen_reviewer.login).to eq("aergonaut")
-    end
-  end
-
-  # mock objects to handle the GraphQL response
-  class UserWithStatus
-    attr_reader :login
-    attr_reader :status
-
-    def initialize(login:, indicatesLimitedAvailability:)
-      @login = login
-      @status = UserStatus.new(indicatesLimitedAvailability: indicatesLimitedAvailability)
-    end
-
-    class UserStatus
-      attr_reader :indicatesLimitedAvailability
-
-      def initialize(indicatesLimitedAvailability:)
-        @indicatesLimitedAvailability = indicatesLimitedAvailability
-      end
-
-      def indicates_limited_availability?
-        @indicatesLimitedAvailability
-      end
     end
   end
 end

@@ -95,7 +95,7 @@ group :development do
   gem "netrc"
 
   gem "rubocop"
-  gem "standard", "~> 0.2.3", require: false
+  gem "standard", "~> 1", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
 

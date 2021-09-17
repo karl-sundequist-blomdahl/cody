@@ -159,9 +159,9 @@ class ReceiveIssueCommentEvent
   end
 
   def comment_replace?(comment)
-    return false unless comment.match?(/^cody\s+r(eplace)?\s+(?<directives>.*)$/)
+    return false unless comment.match?(/^cody\s+r(?:eplace)?\s+(?<directives>.*)$/)
 
-    match_data = comment.match(/^cody\s+r(eplace)?\s+(?<directives>.*)$/)
+    match_data = comment.match(/^cody\s+r(?:eplace)?\s+(?<directives>.*)$/)
     directives = match_data["directives"]
     return false unless directives.match?(DIRECTIVE_REGEX)
     directives
