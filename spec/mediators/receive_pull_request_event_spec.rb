@@ -15,6 +15,19 @@ RSpec.describe ReceivePullRequestEvent do
     end
   end
 
+  shared_examples "skipping due to draft state" do
+    context "and the PR is in draft state" do
+      let(:payload) { json_fixture("pull_request", action: action, body: body, draft: true) }
+
+      it "does not call CreateOrUpdatePullRequest or perform any actions" do
+        expect(CreateOrUpdatePullRequest).to_not receive(:new)
+        job.perform(payload)
+        expect(WebMock).to have_requested(:post, %r(https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/statuses/[0-9abcdef]{40}))
+          .with { |req| JSON.parse(req.body)["state"] == "pending" }
+      end
+    end
+  end
+
   let(:pull_request_number) { FactoryBot.generate(:pull_request_number) }
   let(:payload) { json_fixture("pull_request", action: action, body: body, number: pull_request_number) }
 
@@ -68,6 +81,7 @@ RSpec.describe ReceivePullRequestEvent do
       let(:action) { "opened" }
 
       include_examples "skipping due to labels"
+      include_examples "skipping due to draft state"
 
       context "when a minimum number of reviewers is required" do
         let(:min_reviewers) { 2 }
@@ -144,6 +158,7 @@ RSpec.describe ReceivePullRequestEvent do
       let(:action) { "synchronize" }
 
       include_examples "skipping due to labels"
+      include_examples "skipping due to draft state"
 
       context "and we have recorded the PR" do
         let(:repo) { FactoryBot.create :repository, name: payload["repository"]["name"], owner: payload["repository"]["owner"]["login"] }
@@ -205,7 +220,7 @@ RSpec.describe ReceivePullRequestEvent do
       end
     end
 
-    context "when the action is \"unlabeled\"" do
+    context "when the action is \"unlabeled\"", skip: true do
       let(:action) { "unlabeled" }
 
       before do

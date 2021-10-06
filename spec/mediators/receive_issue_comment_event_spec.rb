@@ -100,6 +100,15 @@ RSpec.describe ReceiveIssueCommentEvent do
         end
       end
 
+      context "when the PR is in draft state" do
+        let(:pr_response_body) { json_fixture("pr", draft: true) }
+
+        it "does not call or perform any actions" do
+          expect(job).to_not receive(:comment_affirmative?)
+          job.perform(payload)
+        end
+      end
+
       context "when the commenter is a reviewer" do
         context "and they approve" do
           it "moves them into the completed_reviews list" do

@@ -40,7 +40,7 @@ class ReceivePullRequestEvent
     end
 
     labels = @payload["pull_request"]["labels"].map { |label| label["name"] }
-    if @repository.ignore?(labels)
+    if @payload["pull_request"]["draft"] || @repository.ignore?(labels)
       github_client.create_status(
         @payload["repository"]["full_name"],
         @payload["pull_request"]["head"]["sha"],
@@ -64,7 +64,8 @@ class ReceivePullRequestEvent
       when "closed"
         on_closed
       when "unlabeled"
-        on_unlabeled
+        # Stop responding to unlabeled as we transition to the Draft status
+        # on_unlabeled
       end
     end
 
@@ -109,7 +110,7 @@ class ReceivePullRequestEvent
   def on_unlabeled
     labels = @payload["pull_request"]["labels"].map { |label| label["name"] }
     number = @payload["number"]
-    if !@repository.ignore?(labels) &&
+    if !@payload["pull_request"]["draft"] && !@repository.ignore?(labels) &&
         !@repository.pull_requests.exists?(number: number)
 
       CreateOrUpdatePullRequest.new.perform(@payload["pull_request"])

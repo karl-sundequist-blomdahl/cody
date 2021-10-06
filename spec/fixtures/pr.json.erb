@@ -1,6 +1,7 @@
 <%
   number ||= 7
   head_sha ||= "92dbdbb370b01a2d8239b5ea41429171b5a99939"
+  draft ||= false
 %>
 {
     "_links": {
@@ -268,6 +269,7 @@
     "issue_url": "https://api.github.com/repos/aergonaut/testrepo/issues/7",
     "locked": false,
     "merge_commit_sha": "f0f930277cd677359fd0c8f54f87560362e105db",
+    "draft": <%= draft %>,
     "mergeable": true,
     "mergeable_state": "clean",
     "merged": false,

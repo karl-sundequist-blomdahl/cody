@@ -36,6 +36,15 @@ class ReceiveIssueCommentEvent
       return
     end
 
+    pr_resource = github_client.pull_request(
+      @repository.full_name,
+      @payload["issue"]["number"]
+    )
+    if pr_resource.draft
+      Current.reset
+      return
+    end
+
     comment = @payload["comment"]["body"]
 
     record_comment_interaction
