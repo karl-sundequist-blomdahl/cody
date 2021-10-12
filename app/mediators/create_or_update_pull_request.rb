@@ -107,6 +107,7 @@ class CreateOrUpdatePullRequest
 
     pr.save!
 
+    peer_reviewers_to_remove = pr.reviewers.pending_review.where(review_rule_id: nil).pluck(:login) - pending_reviews
     # Synchronize the reviewers
     all_reviewers.each do |login|
       # we only respect manual updates to non-generated reviewers
@@ -115,12 +116,14 @@ class CreateOrUpdatePullRequest
         # they were on the list previously
         if completed_reviews.include?(login)
           # marked done
+          peer_reviewers_to_remove << reviewer.login
           reviewer.update!(status: Reviewer::STATUS_APPROVED)
         elsif pending_reviews.include?(login)
           # marked undone
           reviewer.update!(status: Reviewer::STATUS_PENDING_APPROVAL)
         else
           # removed from the list altogether
+          peer_reviewers_to_remove << reviewer.login
           reviewer.destroy!
         end
       # they weren't on the list previously
@@ -135,6 +138,7 @@ class CreateOrUpdatePullRequest
         )
       end
     end
+    peer_reviewers_to_remove.uniq!
 
     # Destroy reviewers who were on the list before but aren't any longer
     pr.reviewers
@@ -161,17 +165,12 @@ class CreateOrUpdatePullRequest
     pr.update_status
     pr.assign_reviewers
 
-    current_requested_reviews =
-      github_client.pull_request_review_requests(
-        pr.repository.full_name,
-        pr.number
-      ).users.map(&:login)
-
-    reviews_to_remove = current_requested_reviews - pr.pending_review_logins
+    # Remove review requests from peer reviewers who were previously requested,
+    # but whose checkboxes are now checked, or were removed.
     github_client.delete_pull_request_review_request(
       pr.repository.full_name,
       pr.number,
-      reviewers: reviews_to_remove
+      reviewers: peer_reviewers_to_remove
     )
   end
   # rubocop:enable Layout/LineLength, Metrics/CyclomaticComplexity, Metrics/MethodLength
