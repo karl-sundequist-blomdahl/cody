@@ -102,7 +102,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    dalli (3.0.1)
+    dalli (3.0.2)
     dead_end (1.1.7)
     derailed_benchmarks (2.1.1)
       benchmark-ips (~> 2)
