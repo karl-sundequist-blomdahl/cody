@@ -3,6 +3,8 @@
 class WebhooksController < ApplicationController
   protect_from_forgery with: :null_session
 
+  before_action :verify_webhook_signature, only: [:integration]
+
   def pull_request
     if %w[opened synchronize closed].include?(params[:webhook][:action])
       ReceivePullRequestEvent.perform_async(params[:webhook].permit!.to_h)
@@ -65,5 +67,22 @@ class WebhooksController < ApplicationController
     end
 
     head :accepted
+  end
+
+  private
+
+  def verify_webhook_signature
+    request.body.rewind
+    payload_body = request.body.read
+
+    valid_signature =
+      VerifyWebhookSignature.call(
+        signature: request.env["HTTP_X_HUB_SIGNATURE_256"],
+        body: payload_body
+      )
+
+    unless valid_signature
+      head :unauthorized
+    end
   end
 end

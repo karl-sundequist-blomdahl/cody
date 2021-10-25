@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe WebhooksController, type: :request do
+  before do
+    allow(VerifyWebhookSignature).to receive(:call).and_return(true)
+  end
+
   shared_examples "pull_request event handler" do
     let(:payload) do
       from_fixture = json_fixture("pull_request")
@@ -111,6 +115,17 @@ RSpec.describe WebhooksController, type: :request do
 
       it "creates a ReceivePullRequestReviewEvent job" do
         expect { subject }.to change(ReceivePullRequestReviewEvent.jobs, :size).by(1)
+      end
+    end
+
+    context "when the webhook signature is invalid" do
+      before do
+        expect(VerifyWebhookSignature).to receive(:call).and_return(false)
+      end
+
+      it "returns 403 unauthorized" do
+        post "/webhooks/integration"
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
