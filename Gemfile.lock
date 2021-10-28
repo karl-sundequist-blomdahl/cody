@@ -78,8 +78,9 @@ GEM
       concurrent-ruby (~> 1.0, >= 1.0.5)
       redis (>= 1.0, <= 5.0)
     builder (3.2.4)
-    capybara (3.35.3)
+    capybara (3.36.0)
       addressable
+      matrix
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
       rack (>= 1.6.0)
@@ -218,10 +219,11 @@ GEM
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     marcel (1.0.1)
+    matrix (0.4.2)
     memory_profiler (1.0.0)
     method_source (1.0.0)
     mini_histogram (0.3.1)
-    mini_mime (1.1.1)
+    mini_mime (1.1.2)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
     msgpack (1.1.0)
@@ -273,7 +275,7 @@ GEM
       nio4r (~> 2.0)
     pundit (2.1.1)
       activesupport (>= 3.0.0)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
     rack-attack (6.5.0)
       rack (>= 1.0, < 3)
@@ -492,7 +494,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.16)
   bootsnap
   break
-  capybara (~> 3.35)
+  capybara (~> 3.36)
   codecov
   coffee-rails (~> 5.0)
   dalli
