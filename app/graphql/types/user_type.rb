@@ -21,13 +21,6 @@ class Types::UserType < Types::BaseObject
     !!@object.send_new_reviews_summary?
   end
 
-  field :paused, Boolean, null: false,
-                          description: "Opt-in choice to temporarily pause assignment of new reviews"
-
-  def paused
-    !!@object.paused?
-  end
-
   field :timezone, String, null: false,
                            description: "The user's configured timezone"
 

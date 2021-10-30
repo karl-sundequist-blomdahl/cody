@@ -34,7 +34,6 @@ type State = {
   email: string;
   sendNewReviewsSummary: boolean;
   timezone: string;
-  paused: boolean;
   lastResponseSuccess: boolean;
 };
 
@@ -53,7 +52,6 @@ function Profile({ user, relay }: Props): JSX.Element {
     email: user.email != null ? user.email : "",
     sendNewReviewsSummary: user.sendNewReviewsSummary,
     timezone: user.timezone,
-    paused: user.paused,
     lastResponseSuccess: false,
   });
 
@@ -122,15 +120,6 @@ function Profile({ user, relay }: Props): JSX.Element {
                 })
               }
             />
-            <Checkbox
-              label="Pause review assignment"
-              hint="You will not be automatically assigned new code reviews. Automatically disables after 2 weeks."
-              name="paused"
-              checked={state.paused}
-              handleChange={() =>
-                dispatch({ param: "paused", value: !state.paused })
-              }
-            />
             <Button
               label="Save"
               style="primary"
@@ -143,7 +132,6 @@ function Profile({ user, relay }: Props): JSX.Element {
                     input: {
                       email: state.email,
                       sendNewReviewsSummary: state.sendNewReviewsSummary,
-                      paused: state.paused,
                       timezone: state.timezone,
                     },
                   },
@@ -168,7 +156,6 @@ export default createFragmentContainer(Profile, {
       name
       sendNewReviewsSummary
       timezone
-      paused
     }
   `,
 });

@@ -50,9 +50,7 @@ class ReceiveIssueCommentEvent
     record_comment_interaction
 
     PaperTrail.request(whodunnit: @payload["sender"]["login"]) do
-      if comment_affirmative?(comment)
-        approval_comment
-      elsif comment_rebuild_reviews?(comment)
+      if comment_rebuild_reviews?(comment)
         rebuild_reviews
       elsif (directives = comment_replace?(comment))
         replace_reviewer(directives)
@@ -76,44 +74,6 @@ class ReceiveIssueCommentEvent
     reviewers_for_login.update(last_commented_at: now)
   end
 
-  def approval_comment
-    pr = find_pull_request(@payload)
-    return unless pr
-
-    # Do not process approval comments on child PRs
-    return if pr.parent_pull_request.present?
-
-    comment = @payload["comment"]["body"]
-    return unless comment_affirmative?(comment)
-
-    comment_author = @payload["sender"]["login"]
-    reviewer = pr.reviewers.pending_review.find_by(login: comment_author)
-    return unless reviewer.present?
-
-    reviewer.approve!
-
-    if pr.reviewers.pending_review.empty?
-      pr.status = "approved"
-      pr.save!
-      pr.update_status
-    end
-
-    pr.assign_reviewers
-
-    CommandInvocation.record_invocation(
-      command: "cody approve",
-      args: "",
-      login: @payload["sender"]["login"],
-      pull_request_id: pr.id
-    )
-
-    github_client.add_comment(
-      @payload["repository"]["full_name"],
-      @payload["issue"]["number"],
-      "@#{comment_author} Approving a code review using a comment has been deprecated and will be removed in the future. Please [submit your review](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/reviewing-proposed-changes-in-a-pull-request#submitting-your-review) through the GitHub interface instead."
-    )
-  end
-
   def rebuild_reviews
     pull_request = github_client.pull_request(
       @payload["repository"]["full_name"],
@@ -121,45 +81,6 @@ class ReceiveIssueCommentEvent
     )
 
     CreateOrUpdatePullRequest.new.perform(pull_request)
-  end
-
-  # Checks if the given string can be taken as an affirmative review.
-  #
-  # Recognized approval phrases (all case insensitive):
-  #
-  # * "LGTM"
-  # * ":+1:" # the GitHub thumbs-up emoji string
-  # * "Looks good"
-  # * "Looks good to me"
-  #
-  # comment - String to check
-  #
-  # Returns true if the comment is affirmative; false otherwise.
-  def comment_affirmative?(comment)
-    return true if comment == "cody approve"
-
-    phrases = %w(
-      lgtm
-      looks\s+good(?:\s+to\s+me)?
-      👍
-      🆗
-      🚀
-      💯
-    )
-
-    # emojis need some extra processing so we handle them separately
-    emojis = %w[
-      \+1
-      ok
-      shipit
-      rocket
-      100
-    ].map { |e| ":#{e}:" }
-
-    affirmatives = (phrases + emojis).map { |a| "(^\\s*#{a}\\s*$)" }
-    joined = affirmatives.join("|")
-
-    !!(comment =~ /#{joined}/i)
   end
 
   def comment_rebuild_reviews?(comment)

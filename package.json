@@ -10,7 +10,8 @@
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint app/javascript --ext .js,.ts,.jsx,.tsx --format codeframe"
+    "lint": "eslint app/javascript --ext .js,.ts,.jsx,.tsx --format codeframe",
+    "relay": "relay-compiler --src ./app/javascript --schema ./schema.graphql"
   },
   "dependencies": {
     "@babel/plugin-syntax-dynamic-import": "7.8.3",

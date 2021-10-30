@@ -31,7 +31,6 @@ fragment Profile_user on User {
   name
   sendNewReviewsSummary
   timezone
-  paused
 }
 */
 
@@ -115,13 +114,6 @@ const node: ConcreteRequest = {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "paused",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "id",
             "storageKey": null
           }
@@ -131,12 +123,12 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "f9412536845f0ad834c27ae5ac393445",
+    "cacheID": "96bf00c78ca68e12af2392d956dc500d",
     "id": null,
     "metadata": {},
     "name": "ProfileRouteQuery",
     "operationKind": "query",
-    "text": "query ProfileRouteQuery {\n  viewer {\n    ...Profile_user\n    id\n  }\n}\n\nfragment Profile_user on User {\n  login\n  email\n  name\n  sendNewReviewsSummary\n  timezone\n  paused\n}\n"
+    "text": "query ProfileRouteQuery {\n  viewer {\n    ...Profile_user\n    id\n  }\n}\n\nfragment Profile_user on User {\n  login\n  email\n  name\n  sendNewReviewsSummary\n  timezone\n}\n"
   }
 };
 (node as any).hash = '33f7dd37035c44a4d6e457484fd1dc99';

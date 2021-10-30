@@ -7,7 +7,6 @@ import { FragmentRefs } from "relay-runtime";
 export type UpdateUserInput = {
     clientMutationId?: string | null;
     email: string;
-    paused: boolean;
     sendNewReviewsSummary: boolean;
     timezone: string;
 };
@@ -46,7 +45,6 @@ fragment Profile_user on User {
   name
   sendNewReviewsSummary
   timezone
-  paused
 }
 */
 
@@ -164,13 +162,6 @@ return {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "paused",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
                 "name": "id",
                 "storageKey": null
               }
@@ -183,12 +174,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "77d704f8ba81aca0a9bcfeba7e84090c",
+    "cacheID": "06e9cf3712975f6b7d91c941efe85d1e",
     "id": null,
     "metadata": {},
     "name": "ProfileUpdateUserMutation",
     "operationKind": "mutation",
-    "text": "mutation ProfileUpdateUserMutation(\n  $input: UpdateUserInput!\n) {\n  updateUser(input: $input) {\n    user {\n      ...Profile_user\n      id\n    }\n  }\n}\n\nfragment Profile_user on User {\n  login\n  email\n  name\n  sendNewReviewsSummary\n  timezone\n  paused\n}\n"
+    "text": "mutation ProfileUpdateUserMutation(\n  $input: UpdateUserInput!\n) {\n  updateUser(input: $input) {\n    user {\n      ...Profile_user\n      id\n    }\n  }\n}\n\nfragment Profile_user on User {\n  login\n  email\n  name\n  sendNewReviewsSummary\n  timezone\n}\n"
   }
 };
 })();

@@ -121,7 +121,6 @@ class ReviewRule < ApplicationRecord
     excludes =
       pull_request.pending_review_logins |
       commit_authors |
-      User.paused_logins |
       extra_excludes
 
     reviewer_list.choose_reviewer(

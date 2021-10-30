@@ -31,10 +31,6 @@ class User < ApplicationRecord
     ActiveSupport::TimeZone[raw]
   end
 
-  def self.paused_logins
-    joins(:user_preference).merge(UserPreference.paused).pluck(:login)
-  end
-
   def role
     ActiveSupport::StringInquirer.new(super)
   end

@@ -10,7 +10,12 @@ type Mutation {
   """
   Update the currently authenticated user
   """
-  updateUser(input: UpdateUserInput!): UpdateUserPayload
+  updateUser(
+    """
+    Parameters for UpdateUser
+    """
+    input: UpdateUserInput!
+  ): UpdateUserPayload
 }
 
 """
@@ -403,7 +408,6 @@ input UpdateUserInput {
   """
   clientMutationId: String
   email: String!
-  paused: Boolean!
   sendNewReviewsSummary: Boolean!
   timezone: String!
 }
@@ -476,11 +480,6 @@ type User implements Node {
   The user's name
   """
   name: String!
-
-  """
-  Opt-in choice to temporarily pause assignment of new reviews
-  """
-  paused: Boolean!
   repositories(
     """
     Returns the elements in the list that come after the specified cursor.

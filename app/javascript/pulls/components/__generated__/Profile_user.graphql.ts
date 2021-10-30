@@ -10,7 +10,6 @@ export type Profile_user = {
     readonly name: string;
     readonly sendNewReviewsSummary: boolean;
     readonly timezone: string;
-    readonly paused: boolean;
     readonly " $refType": "Profile_user";
 };
 export type Profile_user$data = Profile_user;
@@ -61,17 +60,10 @@ const node: ReaderFragment = {
       "kind": "ScalarField",
       "name": "timezone",
       "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "paused",
-      "storageKey": null
     }
   ],
   "type": "User",
   "abstractKey": null
 };
-(node as any).hash = '40c82a4f16635ffc2e9d2c6784ee2aac';
+(node as any).hash = 'c23e22c2393662b9e0f34ab2d3807e42';
 export default node;

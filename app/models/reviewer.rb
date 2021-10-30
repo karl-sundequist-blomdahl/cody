@@ -21,18 +21,9 @@ class Reviewer < ApplicationRecord
     <<~ADDENDUM
       ### #{name_with_code}
 
-      - [#{status_to_check}] @#{login}
+      - @#{login}
       #{context}
     ADDENDUM
-  end
-
-  def status_to_check
-    case status
-    when STATUS_APPROVED
-      "x"
-    else
-      " "
-    end
   end
 
   def name_with_code

@@ -6,12 +6,11 @@ module Mutations
 
     argument :email, String, required: true
     argument :send_new_reviews_summary, Boolean, required: true
-    argument :paused, Boolean, required: true
     argument :timezone, String, required: true
 
     field :user, Types::UserType, null: true
 
-    def resolve(email:, send_new_reviews_summary:, paused:, timezone:)
+    def resolve(email:, send_new_reviews_summary:, timezone:)
       current_user = context[:current_user]
       current_user.update!(email: email)
 
@@ -21,7 +20,6 @@ module Mutations
 
       current_user.user_preference.update!(
         send_new_reviews_summary: send_new_reviews_summary,
-        paused: paused,
         timezone: timezone
       )
 
