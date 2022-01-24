@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.2"
+ruby "3.0.3"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "6.1.4.1"
@@ -48,8 +48,6 @@ gem "sentry-rails"
 gem "sentry-sidekiq"
 
 gem "haml-rails"
-
-gem "transit-ruby", require: "transit"
 
 gem "dalli"
 
@@ -144,3 +142,5 @@ gem "sendgrid-actionmailer"
 gem "rack-floc_block", "~> 0.1"
 
 gem "rack-attack"
+
+gem "oj"

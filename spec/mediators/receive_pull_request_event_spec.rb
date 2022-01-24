@@ -1,20 +1,6 @@
 require "rails_helper"
 
 RSpec.describe ReceivePullRequestEvent do
-  shared_examples "skipping due to labels" do
-    context "and the PR has one of the configured ignore labels on it" do
-      let(:ignore_labels_setting) { ["cody skip"] }
-      let(:payload) { json_fixture("pull_request", action: action, body: body, labels: ["foobar", "cody skip"]) }
-
-      it "does not call CreateOrUpdatePullRequest or perform any actions" do
-        expect(CreateOrUpdatePullRequest).to_not receive(:new)
-        job.perform(payload)
-        expect(WebMock).to have_requested(:post, %r(https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/statuses/[0-9abcdef]{40}))
-          .with { |req| JSON.parse(req.body)["state"] == "pending" }
-      end
-    end
-  end
-
   shared_examples "skipping due to draft state" do
     context "and the PR is in draft state" do
       let(:payload) { json_fixture("pull_request", action: action, body: body, draft: true) }
@@ -43,11 +29,6 @@ RSpec.describe ReceivePullRequestEvent do
   let(:repo) { FactoryBot.create :repository }
 
   before do
-    stub_settings(
-      repo,
-      minimum_reviewers_required: min_reviewers,
-      ignore_labels: ignore_labels_setting
-    )
     allow(Repository).to receive(:find_by_full_name).and_return(repo)
 
     stub_request(:get, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/commits}).to_return(
@@ -80,38 +61,7 @@ RSpec.describe ReceivePullRequestEvent do
     context "when the action is \"opened\"" do
       let(:action) { "opened" }
 
-      include_examples "skipping due to labels"
       include_examples "skipping due to draft state"
-
-      context "when a minimum number of reviewers is required" do
-        let(:min_reviewers) { 2 }
-
-        context "and the PR does not have enough" do
-          let(:min_reviewers) { 3 }
-
-          it "puts the failure status on the commit" do
-            job.perform(payload)
-            expect(WebMock).to have_requested(:post, %r(https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/statuses/[0-9abcdef]{40}))
-              .with { |req| JSON.parse(req.body)["state"] == "failure" }
-          end
-
-          it "does not make a new PullRequest record" do
-            expect { job.perform(payload) }.to_not change { PullRequest.count }
-          end
-        end
-
-        context "and there aren't enough unique reviewers" do
-          let(:body) do
-            '- [ ] @BrentW\n- [ ] @BrentW\n'
-          end
-
-          it "puts the failure status on the commit" do
-            job.perform(payload)
-            expect(WebMock).to have_requested(:post, %r(https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/statuses/[0-9abcdef]{40}))
-              .with { |req| JSON.parse(req.body)["state"] == "failure" }
-          end
-        end
-      end
 
       context "when no fatal errors are raised" do
         before do
@@ -157,7 +107,6 @@ RSpec.describe ReceivePullRequestEvent do
     context "when the action is \"synchronize\"" do
       let(:action) { "synchronize" }
 
-      include_examples "skipping due to labels"
       include_examples "skipping due to draft state"
 
       context "and we have recorded the PR" do
@@ -216,47 +165,6 @@ RSpec.describe ReceivePullRequestEvent do
 
         it "marks the PR as closed" do
           expect(pr.reload.status).to eq("closed")
-        end
-      end
-    end
-
-    context "when the action is \"unlabeled\"", skip: true do
-      let(:action) { "unlabeled" }
-
-      before do
-        expect(repo).to receive(:ignore?).and_return(repo_should_ignore).at_least(:once)
-      end
-
-      context "when the repository does not ignore the labels" do
-        let(:repo_should_ignore) { false }
-
-        context "and the PR has not been created" do
-          it "calls CreateOrUpdatePullRequest" do
-            mock = instance_double(CreateOrUpdatePullRequest)
-            expect(CreateOrUpdatePullRequest).to receive(:new).and_return(mock)
-            expect(mock).to receive(:perform)
-            job.perform(payload)
-          end
-        end
-
-        context "and the PR has been created" do
-          before do
-            FactoryBot.create :pull_request, number: pull_request_number, repository: repo
-          end
-
-          it "does not call CreateOrUpdatePullRequest" do
-            expect(CreateOrUpdatePullRequest).to_not receive(:new)
-            job.perform(payload)
-          end
-        end
-      end
-
-      context "when the repository ignores the labels" do
-        let(:repo_should_ignore) { true }
-
-        it "does not call CreateOrUpdatePullRequest" do
-          expect(CreateOrUpdatePullRequest).to_not receive(:new)
-          job.perform(payload)
         end
       end
     end

@@ -39,8 +39,7 @@ class ReceivePullRequestEvent
       end
     end
 
-    labels = @payload["pull_request"]["labels"].map { |label| label["name"] }
-    if @payload["pull_request"]["draft"] || @repository.ignore?(labels)
+    if @payload["pull_request"]["draft"]
       github_client.create_status(
         @payload["repository"]["full_name"],
         @payload["pull_request"]["head"]["sha"],
@@ -63,9 +62,6 @@ class ReceivePullRequestEvent
         on_synchronize
       when "closed"
         on_closed
-      when "unlabeled"
-        # Stop responding to unlabeled as we transition to the Draft status
-        # on_unlabeled
       end
     end
 
@@ -94,26 +90,5 @@ class ReceivePullRequestEvent
   # commit with the correct status indicator.
   def on_synchronize
     CreateOrUpdatePullRequest.new.perform(@payload["pull_request"])
-  end
-
-  # This function is called whenever a label is removed.
-  #
-  # If the repository no longer ignores the PR, and the PR is not recorded yet,
-  # then we record the PR into the DB. Otherwise, if the PR already exists in
-  # the DB, then this function does nothing. Only acting on never before seen
-  # PRs should help reduce the amount of activity from this function.
-  #
-  # If the PR previously existed, that should mean that the PR was created
-  # without any ignore labels on it, and an ignore label was added later. That
-  # should mean that the PR already has reviewers assigned, and we don't want
-  # the unlabel action to change reviewers.
-  def on_unlabeled
-    labels = @payload["pull_request"]["labels"].map { |label| label["name"] }
-    number = @payload["number"]
-    if !@payload["pull_request"]["draft"] && !@repository.ignore?(labels) &&
-        !@repository.pull_requests.exists?(number: number)
-
-      CreateOrUpdatePullRequest.new.perform(@payload["pull_request"])
-    end
   end
 end

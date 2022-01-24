@@ -51,7 +51,7 @@
       <% if i != 0 %>,<% end %>{
         "id": 1,
         "node_id": "MDU7jQFiZWw5DCU3MDk1ODM=",
-        "url": "https://api.github.com/repos/baxterthehacker/public-repo/labels/<%= URI.encode(label) %>",
+        "url": "https://api.github.com/repos/baxterthehacker/public-repo/labels/<%= CGI.escape(label) %>",
         "name": "<%= label %>",
         "color": "ededed",
         "default": false

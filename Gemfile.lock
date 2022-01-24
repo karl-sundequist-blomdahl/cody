@@ -226,7 +226,7 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
-    msgpack (1.1.0)
+    msgpack (1.4.2)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
@@ -450,10 +450,6 @@ GEM
     thor (1.1.0)
     tilt (2.0.10)
     timecop (0.9.4)
-    transit-ruby (0.8.606)
-      addressable (~> 2.3)
-      msgpack (~> 1.1.0)
-      oj (~> 2.18)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -517,6 +513,7 @@ DEPENDENCIES
   memory_profiler
   netrc
   octokit
+  oj
   omniauth-github
   omniauth-rails_csrf_protection
   paper_trail (~> 12.1)
@@ -548,7 +545,6 @@ DEPENDENCIES
   stackprof
   standard (~> 1)
   timecop
-  transit-ruby
   turbolinks
   tzinfo-data
   uglifier (>= 1.3.0)
@@ -558,7 +554,7 @@ DEPENDENCIES
   webpacker
 
 RUBY VERSION
-   ruby 2.7.2p137
+   ruby 3.0.3p157
 
 BUNDLED WITH
-   1.17.3
+   2.3.2

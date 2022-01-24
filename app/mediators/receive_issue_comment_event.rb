@@ -30,12 +30,6 @@ class ReceiveIssueCommentEvent
     @repository =
       Repository.find_by_full_name(@payload["repository"]["full_name"])
 
-    labels = @payload["issue"]["labels"].map { |label| label["name"] }
-    if @repository.ignore?(labels)
-      Current.reset
-      return
-    end
-
     pr_resource = github_client.pull_request(
       @repository.full_name,
       @payload["issue"]["number"]

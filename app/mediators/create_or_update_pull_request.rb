@@ -59,14 +59,6 @@ class CreateOrUpdatePullRequest
       return
     end
 
-    minimum_reviewers_required = repository.read_setting("minimum_reviewers_required")
-    if minimum_reviewers_required.present? &&
-        check_box_pairs.count < minimum_reviewers_required
-
-      pr.update_status(PullRequest::STATUS_APRICOT)
-      return
-    end
-
     pending_reviews = []
     completed_reviews = []
 

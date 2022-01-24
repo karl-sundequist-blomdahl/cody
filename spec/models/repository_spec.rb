@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe Repository, type: :model do
   it { is_expected.to have_many :pull_requests }
   it { is_expected.to have_many :review_rules }
-  it { is_expected.to have_many :settings }
   it { is_expected.to belong_to :installation }
 
   describe ".find_by_full_name" do
@@ -22,34 +21,6 @@ RSpec.describe Repository, type: :model do
     subject { repo.full_name }
 
     it { is_expected.to eq(full_name) }
-  end
-
-  describe "#ignore?" do
-    let(:repo) { FactoryBot.build :repository }
-
-    before do
-      expect(repo).to receive(:read_setting).with("ignore_labels").and_return(ignore_labels_setting)
-    end
-
-    subject { repo.ignore?(["foobar", "fizbuzz", "cody skip"]) }
-
-    context "when the repo does not have a ignore_labels setting" do
-      let(:ignore_labels_setting) { nil }
-
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the labels do not match any of the ignored labels" do
-      let(:ignore_labels_setting) { ["hello world"] }
-
-      it { is_expected.to be_falsey }
-    end
-
-    context "when the labels match some of the ignored labels" do
-      let(:ignore_labels_setting) { ["cody skip"] }
-
-      it { is_expected.to be_truthy }
-    end
   end
 
   describe "#refresh_config!" do
@@ -117,8 +88,6 @@ RSpec.describe Repository, type: :model do
     it "applies the config according to the file", :aggregate_failures do
       repo.refresh_config!
       repo.reload
-
-      expect(repo.read_setting("minimum_reviewers_required")).to eq(2)
 
       second_level = repo.review_rules.find_by(short_code: "second_level")
       expect(second_level).to be_present

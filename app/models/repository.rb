@@ -8,7 +8,6 @@ class Repository < ApplicationRecord
 
   has_many :pull_requests
   has_many :review_rules
-  has_many :settings
 
   belongs_to :installation
 
@@ -19,25 +18,8 @@ class Repository < ApplicationRecord
     find_by(owner: owner, name: name)
   end
 
-  # @param key [String]
-  # @return [String]
-  def read_setting(key)
-    setting(key)&.read
-  end
-
-  def setting(key)
-    settings.find_by(key: key)
-  end
-
   def full_name
     "#{owner}/#{name}"
-  end
-
-  # Determines if the repository's settings would ignore the given set of labels
-  def ignore?(labels)
-    ignored_labels = Array(read_setting("ignore_labels"))
-    ignored_labels.present? &&
-      Set.new(ignored_labels).intersect?(Set.new(labels))
   end
 
   # Refresh this repository's config by reading the configuration file from
@@ -66,7 +48,6 @@ class Repository < ApplicationRecord
       end
     return unless config.valid?
 
-    refresh_settings
     refresh_rules
 
     self.config_hash = hexdigest
@@ -74,20 +55,6 @@ class Repository < ApplicationRecord
   end
 
   private
-
-  def refresh_settings
-    if (min_reviewers_config = config[:minimum_reviewers_required])
-      if (min_reviewers_setting = setting("minimum_reviewers_required"))
-        min_reviewers_setting.set(min_reviewers_config)
-        min_reviewers_setting.save!
-      else
-        settings.create!(
-          key: "minimum_reviewers_required",
-          value: min_reviewers_config
-        )
-      end
-    end
-  end
 
   def refresh_rules
     teams = github_client.org_teams(owner)
