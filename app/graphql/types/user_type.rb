@@ -11,15 +11,9 @@ class Types::UserType < Types::BaseObject
                         description: "The user's email"
   field :name, String, null: false,
                        description: "The user's name"
-  field :send_new_reviews_summary, Boolean, null: false,
-                                            description: "Opt-in choice for daily code review summary email"
 
   field :created_at, GraphQL::Types::ISO8601DateTime, null: false
   field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
-
-  def send_new_reviews_summary
-    !!@object.send_new_reviews_summary?
-  end
 
   field :timezone, String, null: false,
                            description: "The user's configured timezone"

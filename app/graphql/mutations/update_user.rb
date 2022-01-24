@@ -5,12 +5,11 @@ module Mutations
     description "Update the currently authenticated user"
 
     argument :email, String, required: true
-    argument :send_new_reviews_summary, Boolean, required: true
     argument :timezone, String, required: true
 
     field :user, Types::UserType, null: true
 
-    def resolve(email:, send_new_reviews_summary:, timezone:)
+    def resolve(email:, timezone:)
       current_user = context[:current_user]
       current_user.update!(email: email)
 
@@ -19,7 +18,6 @@ module Mutations
       end
 
       current_user.user_preference.update!(
-        send_new_reviews_summary: send_new_reviews_summary,
         timezone: timezone
       )
 

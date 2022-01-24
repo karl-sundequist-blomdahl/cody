@@ -8,7 +8,6 @@ export type Profile_user = {
     readonly login: string;
     readonly email: string | null;
     readonly name: string;
-    readonly sendNewReviewsSummary: boolean;
     readonly timezone: string;
     readonly " $refType": "Profile_user";
 };
@@ -51,13 +50,6 @@ const node: ReaderFragment = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "sendNewReviewsSummary",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
       "name": "timezone",
       "storageKey": null
     }
@@ -65,5 +57,5 @@ const node: ReaderFragment = {
   "type": "User",
   "abstractKey": null
 };
-(node as any).hash = 'c23e22c2393662b9e0f34ab2d3807e42';
+(node as any).hash = '28d9bb3856484777fa004ea22ff42a8e';
 export default node;

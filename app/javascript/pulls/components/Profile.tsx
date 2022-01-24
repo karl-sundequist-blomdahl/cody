@@ -7,7 +7,6 @@ import {
 } from "react-relay";
 import { listTimeZones } from "timezone-support";
 import TextField from "./inputs/TextField";
-import Checkbox from "./inputs/Checkbox";
 import type { Profile_user } from "./__generated__/Profile_user.graphql";
 import Container from "./Container";
 import Button from "./inputs/Button";
@@ -32,7 +31,6 @@ type Props = {
 
 type State = {
   email: string;
-  sendNewReviewsSummary: boolean;
   timezone: string;
   lastResponseSuccess: boolean;
 };
@@ -50,7 +48,6 @@ function profileReducer<K extends keyof State>(
 function Profile({ user, relay }: Props): JSX.Element {
   const [state, dispatch] = useReducer(profileReducer, {
     email: user.email != null ? user.email : "",
-    sendNewReviewsSummary: user.sendNewReviewsSummary,
     timezone: user.timezone,
     lastResponseSuccess: false,
   });
@@ -108,18 +105,6 @@ function Profile({ user, relay }: Props): JSX.Element {
                 ))}
               </select>
             </div>
-            <Checkbox
-              label="Subscribe to email digests"
-              hint="Your pending code reviews will be emailed to you at 8 am local time on weekdays."
-              name="send_new_reviews_summary"
-              checked={state.sendNewReviewsSummary}
-              handleChange={() =>
-                dispatch({
-                  param: "sendNewReviewsSummary",
-                  value: !state.sendNewReviewsSummary,
-                })
-              }
-            />
             <Button
               label="Save"
               style="primary"
@@ -131,7 +116,6 @@ function Profile({ user, relay }: Props): JSX.Element {
                   variables: {
                     input: {
                       email: state.email,
-                      sendNewReviewsSummary: state.sendNewReviewsSummary,
                       timezone: state.timezone,
                     },
                   },
@@ -154,7 +138,6 @@ export default createFragmentContainer(Profile, {
       login
       email
       name
-      sendNewReviewsSummary
       timezone
     }
   `,

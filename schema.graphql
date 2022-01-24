@@ -408,7 +408,6 @@ input UpdateUserInput {
   """
   clientMutationId: String
   email: String!
-  sendNewReviewsSummary: Boolean!
   timezone: String!
 }
 
@@ -506,11 +505,6 @@ type User implements Node {
   Find a given repository by the owner and name
   """
   repository(name: String!, owner: String!): Repository
-
-  """
-  Opt-in choice for daily code review summary email
-  """
-  sendNewReviewsSummary: Boolean!
 
   """
   The user's configured timezone
