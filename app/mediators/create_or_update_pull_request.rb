@@ -8,7 +8,6 @@ class CreateOrUpdatePullRequest
   # pull_request - A Hash-like object containing the PR data from the GitHub API
   # options - Hash of options
   #           :skip_review_rules - Boolean to apply review rules or skip
-  # rubocop:disable Layout/LineLength, Metrics/CyclomaticComplexity, Metrics/MethodLength
   def perform(pull_request, options = {})
     body = pull_request["body"] || ""
     repository = Repository.find_by_full_name(pull_request["base"]["repo"]["full_name"])
@@ -135,7 +134,7 @@ class CreateOrUpdatePullRequest
     # Destroy reviewers who were on the list before but aren't any longer
     pr.reviewers
       .where(review_rule_id: nil)
-      .where("reviewers.login NOT IN (?)", all_reviewers)
+      .where.not(reviewers: {login: all_reviewers})
       .destroy_all
 
     unless options[:skip_review_rules]

@@ -19,7 +19,7 @@ class Types::PullRequestType < Types::BaseObject
   end
   field :status, String, null: false
 
-  field :reviewers, Types::ReviewerType.connection_type, null: true, connection: true do # rubocop:disable Layout/LineLength
+  field :reviewers, Types::ReviewerType.connection_type, null: true, connection: true do
     argument :status, Types::ReviewerStatusType, required: false
   end
 

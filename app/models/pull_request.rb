@@ -11,8 +11,8 @@ class PullRequest < ApplicationRecord
 
   scope :pending_review, -> { where(status: "pending_review") }
 
-  belongs_to :repository, required: true
-  belongs_to :parent_pull_request, required: false, class_name: "PullRequest"
+  belongs_to :repository, optional: false
+  belongs_to :parent_pull_request, optional: true, class_name: "PullRequest"
   has_many :reviewers, inverse_of: :pull_request
 
   has_paper_trail
@@ -41,9 +41,7 @@ class PullRequest < ApplicationRecord
 
   include GithubApi
 
-  def owner
-    repository.owner
-  end
+  delegate :owner, to: :repository
 
   def repo
     repository.name

@@ -11,5 +11,11 @@ inherit_gem:
   standard: config/base.yml
 
 AllCops:
+  NewCops: enable
   Exclude:
     - db/schema.rb
+
+Rails/DynamicFindBy:
+  AllowedMethods:
+    - find_by_sql
+    - find_by_full_name

@@ -15,7 +15,7 @@ class ReviewRuleDiffMatch < ReviewRule
     rescue Octokit::NotFound => e
       if retries < MAX_RETRIES
         retries += 1
-        Rails.logger.info "Request for files for PR ##{pull_request_hash["number"]} was 404, sleeping and retrying (retries = #{retries})" # rubocop:disable Layout/LineLength
+        Rails.logger.info "Request for files for PR ##{pull_request_hash["number"]} was 404, sleeping and retrying (retries = #{retries})"
         sleep(1)
         retry
       else

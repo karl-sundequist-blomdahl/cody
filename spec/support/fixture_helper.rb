@@ -11,7 +11,7 @@ module FixtureHelper
   def json_fixture(path, locals = {})
     contents =
       if Rails.root.join("spec", "fixtures", "#{path}.json.erb").exist?
-        erb = File.open(Rails.root.join("spec", "fixtures", "#{path}.json.erb")).read
+        erb = File.read(Rails.root.join("spec", "fixtures", "#{path}.json.erb"))
         ERB.new(erb).result_with_hash(locals)
       else
         File.open(Rails.root.join("spec", "fixtures", "#{path}.json"))
@@ -26,7 +26,7 @@ module FixtureHelper
   # @param locals [Hash] a Hash of local variables
   # @return [String] the result of evaluating the ERB
   def erb_fixture(path, locals = {})
-    erb = File.open(Rails.root.join("spec", "fixtures", "#{path}.erb")).read
+    erb = File.read(Rails.root.join("spec", "fixtures", "#{path}.erb"))
     ERB.new(erb).result_with_hash(locals)
   end
 end

@@ -3,7 +3,6 @@
 class Config
   PATH = ".cody.yml"
 
-  # rubocop:disable Layout/LineLength
   SCHEMA = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     id: "https://codybot.xyz/config/schema",

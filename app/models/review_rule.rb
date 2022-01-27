@@ -3,7 +3,7 @@
 class ReviewRule < ApplicationRecord
   GENERATED_REVIEWERS_REGEX = /^\s*#*\s*Generated\s*Reviewers\s*$/
 
-  belongs_to :repository, required: true
+  belongs_to :repository, optional: false
 
   validates :name, presence: true
   validates :reviewer, presence: true
