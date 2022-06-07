@@ -131,8 +131,6 @@ gem "scout_apm"
 
 gem "barnes"
 
-gem "slack-ruby-client"
-
 gem "bootsnap", require: false
 
 gem "rack-canonical-host"

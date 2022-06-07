@@ -30,8 +30,5 @@ Rails.application.routes.draw do
 
   get "/auth/:provider/callback" => "sessions#create"
 
-  post "/slack/command" => "slack#command"
-  get "/slack/connect" => "slack#connect"
-
   root "pulls#index"
 end

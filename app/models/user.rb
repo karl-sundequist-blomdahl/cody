@@ -9,8 +9,6 @@ class User < ApplicationRecord
   has_one :user_preference, inverse_of: :user
   has_many :api_keys
 
-  has_one :slack_identity
-
   attr_encrypted :access_key, key: :encryption_key
 
   ALLOWED_JWT_ALGORITHMS = %w[HS256 RS256].freeze
