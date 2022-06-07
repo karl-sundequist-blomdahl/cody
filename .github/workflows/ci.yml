@@ -39,6 +39,7 @@ jobs:
       CODY_JWT_SECRET_KEY: fake
       CODY_HOST: cody.example
       CODY_ATTR_ENCRYPTED_KEY: "eTJIFMy/H5/FL2HXllaCyZ5XcY6FsC0itYVN7ZbNxv0="
+      CODY_BOT_ID: 1234
       RAILS_ENV: test
     services:
       # Label used to access the service container
@@ -114,6 +115,7 @@ jobs:
       CODY_JWT_SECRET_KEY: fake
       CODY_HOST: cody.example
       CODY_ATTR_ENCRYPTED_KEY: "eTJIFMy/H5/FL2HXllaCyZ5XcY6FsC0itYVN7ZbNxv0="
+      CODY_BOT_ID: 1234
       RAILS_ENV: test
     services:
       # Label used to access the service container
