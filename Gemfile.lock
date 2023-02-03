@@ -421,6 +421,8 @@ GEM
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
       redis-client (>= 0.11.0)
+    sidekiq-delay_extensions (6.4.1)
+      sidekiq (>= 6.4.1)
     sidekiq-unique-jobs (8.0.0)
       brpoplpush-redis_script (> 0.1.1, <= 2.0.0)
       concurrent-ruby (~> 1.0, >= 1.0.5)
@@ -538,6 +540,7 @@ DEPENDENCIES
   sentry-sidekiq
   shoulda-matchers
   sidekiq
+  sidekiq-delay_extensions (~> 6.4)
   sidekiq-unique-jobs
   spring
   stackprof

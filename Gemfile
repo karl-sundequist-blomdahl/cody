@@ -142,3 +142,5 @@ gem "rack-floc_block", "~> 0.1"
 gem "rack-attack"
 
 gem "oj"
+
+gem "sidekiq-delay_extensions", "~> 6.4"
