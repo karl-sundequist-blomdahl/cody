@@ -1,4 +1,4 @@
-class AddReviewRules < ActiveRecord::Migration
+class AddReviewRules < ActiveRecord::Migration[5.0]
   def change
     create_table :review_rules do |t|
       t.string :name
