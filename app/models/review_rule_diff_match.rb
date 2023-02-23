@@ -5,7 +5,7 @@ class ReviewRuleDiffMatch < ReviewRule
   validates :file_match, presence: true
 
   def file_match_regex
-    /#{file_match}/
+    @file_match_regex ||= Regexp.new(file_match, timeout: 3)
   end
 
   def matches?(pull_request_hash)
