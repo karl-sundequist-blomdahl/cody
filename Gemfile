@@ -99,7 +99,6 @@ group :development do
 
   gem "letter_opener"
 
-  gem "derailed_benchmarks"
   gem "stackprof"
 end
 
