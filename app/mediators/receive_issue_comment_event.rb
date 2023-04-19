@@ -99,6 +99,7 @@ class ReceiveIssueCommentEvent
     pr = find_pull_request(@payload)
     return false unless pr
 
+    commentor = @payload["sender"]["login"]
     removed_reviewers = []
     directives.scan(DIRECTIVE_REGEX).each do |code, login|
       reviewer = pr.generated_reviewers
@@ -107,7 +108,8 @@ class ReceiveIssueCommentEvent
 
       next unless reviewer.present?
 
-      next unless reviewer.review_rule.possible_reviewer?(login)
+      next unless reviewer.review_rule.possible_reviewer?(login) ||
+        (commentor == login && reviewer.review_rule.user_in_list?(login))
 
       next if reviewer.login == login
 
@@ -137,7 +139,7 @@ class ReceiveIssueCommentEvent
     CommandInvocation.record_invocation(
       command: "cody replace",
       args: directives,
-      login: @payload["sender"]["login"],
+      login: commentor,
       pull_request_id: pr.id
     )
   end

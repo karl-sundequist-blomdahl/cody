@@ -5,6 +5,8 @@ class ReviewRule < ApplicationRecord
 
   belongs_to :repository, optional: false
 
+  delegate :user_in_list?, to: :possible_reviewers
+
   validates :name, presence: true
   validates :reviewer, presence: true
   validates :short_code, presence: true, uniqueness: {scope: :repository_id}

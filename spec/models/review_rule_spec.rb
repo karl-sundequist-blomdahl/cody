@@ -34,6 +34,17 @@ RSpec.describe ReviewRule, type: :model do
     end
   end
 
+  describe "user_in_list?" do
+    let(:reviewer) { "aergonaut" }
+    let(:invalid_reviewer) { "mrpasquini" }
+    it "returns true if user in list" do
+      expect(rule.user_in_list?(reviewer)).to be true
+    end
+    it "returns false if user is not in list" do
+      expect(rule.user_in_list?(invalid_reviewer)).to be false
+    end
+  end
+
   describe "#add_reviewer" do
     let(:pr) { create :pull_request, pending_reviews: pending_reviews }
 

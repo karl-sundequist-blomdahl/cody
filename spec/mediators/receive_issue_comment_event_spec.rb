@@ -153,6 +153,22 @@ RSpec.describe ReceiveIssueCommentEvent do
         expect(foo_reviewer.login).to eq("BrentW")
       end
     end
+
+    context "when the reviewer is the commentor and a possible reviewer, but inactive" do
+      let(:comment) { "cody replace foo=@BrentW" }
+      let(:acceptable_reviewer) { "BrentW" }
+      let(:sender) { "BrentW" }
+
+      it "replaces aergonaut with BrentW" do
+        foo_reviewer = pr.reviewers.find_by(review_rule_id: rule.id)
+
+        job.perform(payload)
+
+        expect(Reviewer.exists?(foo_reviewer.id)).to be_falsey
+        foo_reviewer = pr.reviewers.find_by(review_rule_id: rule.id)
+        expect(foo_reviewer.login).to eq("BrentW")
+      end
+    end
   end
 
   describe "#comment_replace_me" do

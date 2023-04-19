@@ -28,6 +28,10 @@ class ReviewerList
       .sample
   end
 
+  def user_in_list?(login)
+    @reviewers.any? { |r| r.login == login }
+  end
+
   private
 
   def user_available?(user)
