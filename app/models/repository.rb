@@ -84,6 +84,13 @@ class Repository < ApplicationRecord
         ).tap do |r|
           r.file_match = Array.wrap(rule_config[:match][:diff]).join("|")
         end
+      elsif rule_config[:match][:base_ref]
+        ReviewRuleBaseMatch.find_or_initialize_by(
+          short_code: rule_config[:short_code],
+          repository_id: id
+        ).tap do |r|
+          r.ref_match = Array.wrap(rule_config[:match][:base_ref]).join("|")
+        end
       end
 
     return unless rule

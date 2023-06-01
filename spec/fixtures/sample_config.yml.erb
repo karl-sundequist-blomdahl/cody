@@ -21,6 +21,13 @@ rules:
       diff:
         - octocat
 
+  - name: Release Branch Review
+    short_code: release_branch
+    reviewer: testorg/branch-reviewers
+    match:
+      base_ref:
+        - release
+
   - name: <%= existing_rule.name %>Altered
     short_code: <%= existing_rule.short_code %>
     reviewer: testorg/existing-rule

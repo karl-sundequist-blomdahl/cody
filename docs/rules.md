@@ -17,6 +17,11 @@ reviewer is added.
 Diff Match rules work like File Match rules but instead of testing the paths of
 files, this rule tests the combined diff of each file.
 
+## Base Match
+
+Base Match rules test the base ref of the PR against a regular expression. If
+there is a match, the corresponding reviewer is added.
+
 ## Always
 
 Always rules are applied to every PR. Use these rules to specify a reviewer that

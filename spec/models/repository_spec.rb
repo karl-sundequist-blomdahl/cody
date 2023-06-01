@@ -57,6 +57,11 @@ RSpec.describe Repository, type: :model do
           slug: "migrations-reviewers"
         },
         {
+          id: 3,
+          name: "Branch Reviewers",
+          slug: "branch-reviewers"
+        },
+        {
           id: 1234,
           name: "Existing Rule",
           slug: "existing-rule"
@@ -103,6 +108,11 @@ RSpec.describe Repository, type: :model do
       expect(octocat).to be_present
       expect(octocat).to be_a(ReviewRuleDiffMatch)
       expect(octocat.reviewer).to eq("octocat")
+
+      branch = repo.review_rules.find_by(short_code: "release_branch")
+      expect(branch).to be_present
+      expect(branch).to be_a(ReviewRuleBaseMatch)
+      expect(branch.reviewer).to eq("testorg/branch-reviewers")
 
       old_name = existing_rule.name
       existing_rule.reload

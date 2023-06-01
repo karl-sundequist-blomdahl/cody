@@ -95,6 +95,27 @@ class Config
                       ]
                     }
                   }
+                },
+                {
+                  type: "object",
+                  title: "Review Rule Base Match",
+                  description: "Base Match Rules match based on the base ref of the PR",
+                  additionalProperties: false,
+                  properties: {
+                    base_ref: {
+                      oneOf: [
+                        {
+                          type: "array",
+                          items: {
+                            type: "string"
+                          }
+                        },
+                        {
+                          type: "string"
+                        }
+                      ]
+                    }
+                  }
                 }
               ]
             }

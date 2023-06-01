@@ -74,6 +74,8 @@ has two possible keys:
   files changed in the PR
 * `diff`: a list of regular expressions that are tested against the combined
   diff of the PR
+* `base_ref`: a list of regular expressions that are tested against the
+  base ref of the PR
 
 > Note: `path` and `diff` are currently mutually exclusive. It is an error to
 > specify both in one match config.

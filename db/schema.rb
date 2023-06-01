@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_22_012728) do
+ActiveRecord::Schema.define(version: 2023_06_01_140430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 2022_02_22_012728) do
     t.string "short_code"
     t.bigint "repository_id"
     t.boolean "active", default: true
+    t.string "ref_match"
     t.index ["repository_id"], name: "index_review_rules_on_repository_id"
     t.index ["short_code", "repository_id"], name: "index_review_rules_on_short_code_and_repository_id", unique: true
   end
